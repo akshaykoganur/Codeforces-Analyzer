@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Codeforces Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("https://res.cloudinary.com/dhqtrt7px/image/upload/v1695116829/jtvzetwga7b0sm7mfaqv.jpg");
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h3 {
+            color: #555;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin: 10px 0;
+            width: 200px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Codeforces Analyzer</h1>
+
+        <form id="usernameForm" action="{% url 'analysis' %}" name="usernameForm" method="GET">
+            <input type="text" name="user_name" id="user_name" placeholder="Enter your username" required>
+            <br>
+            <button type="submit" value="Submit" onclick="submitForm()">Submit</button>
+            <script>
+                function submitForm(){
+                    document.form.submit();
+                }
+            </script>
+        </form>
+    </div>
+</body>
+
+</html>
