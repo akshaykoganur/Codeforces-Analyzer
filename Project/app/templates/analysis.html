@@ -8,6 +8,10 @@
     <div>
         <h2>User Name : {{ user_info.handle }}</h2>
         <h2>Rating : {{ user_info.rating }} ({{ user_info.rank }})</h2>
+        <!--{% for contest in past %}
+        <p> {{ contest }} </p>
+        {% endfor %}-->
+        {{ past|safe }}
     </div>
 </body>
 </html>
