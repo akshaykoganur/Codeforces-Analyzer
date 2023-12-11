@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <title>Codeforces Analyzer</title>
 </head>
-<body>
+<body style=" background-color: Cyan">
+    <div style="text-align: center; font-family: Arial, sans-serif;">
+        <h2>User Name: <span>{{ user_info.handle }}</span></h2>
+        <h2>Rating: <span >{{ user_info.rating }}</span> (<span style="font-style: italic;">{{ user_info.rank }}</span>)</h2>
+    </div>
     <div>
-        <h2>User Name : {{ user_info.handle }}</h2>
-        <h2>Rating : {{ user_info.rating }} ({{ user_info.rank }})</h2>
+
         <!--{% for contest in past %}
         <p> {{ contest }} </p>
         {% endfor %}-->

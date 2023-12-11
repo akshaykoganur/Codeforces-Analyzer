@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 def home(request):
     return render(request, "home.html")
@@ -32,6 +33,7 @@ def analysis(request):
     #Check performance of past 10 contests
     past_contest_performance = [[0]*10]*len(past_10_contests)
     past_arr = [0]*len(past_10_contests)
+    past_contest_problems_solved = [0]*len(past_10_contests)
     for i in range(len(past_10_contests)):
         for j in range(10):
             past_contest_performance[i][j] = 0
@@ -41,14 +43,23 @@ def analysis(request):
         contest_status_data = data2['result']
         total_problem_rating = 0
         total_problems_solved = 0
+        flag = 0
+        if "rating" in contest_status_data[0]["problem"]:
+            flag = 0
+        else:
+            continue
         for j in range(len(contest_status_data)):
             if(contest_status_data[j]['verdict']=="OK" and past_contest_performance[i][ord(contest_status_data[j]['problem']['index']) - 65]==0):
                 past_contest_performance[i][ord(contest_status_data[j]['problem']['index']) - 65] = 1
-                total_problem_rating+=contest_status_data[j]['problem']['rating']
+                if(contest_status_data[j]["problem"]["rating"]):
+                    total_problem_rating+=contest_status_data[j]["problem"]["rating"]
                 total_problems_solved+=1
         past_arr[i] = total_problem_rating/total_problems_solved
-        fig = go.Figure(data=go.Scatter(y=past_arr))
-        chart = fig.to_html
+        past_contest_problems_solved[i] = total_problems_solved
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(go.Scatter(y=past_arr, name='Average Rating of Problems Solved'), secondary_y=False,)
+    fig.add_trace(go.Scatter(y=past_contest_problems_solved, name='Total Problem Solved'), secondary_y=True,)
+    chart = fig.to_html
 
     return render(request, 'analysis.html', context={'user_info': user_data, 'past_contests': past_10_contests, 'past': chart})
     #return HttpResponse(req)
