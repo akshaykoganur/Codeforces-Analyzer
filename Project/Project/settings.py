@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+3woexp2$a&h*%lsvl$79jnzryud(@a9x7y1t2xqjul6=vs%0r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['codeforces-analyzer.onrender.com']
 
 
 # Application definition
