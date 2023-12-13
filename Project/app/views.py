@@ -16,7 +16,7 @@ def analysis(request):
     user_name = request.GET.get("user_name")
     user_info_url = 'https://codeforces.com/api/user.info?handles=' + user_name
     req = requests.get(user_info_url)
-    #time.sleep(1)
+    time.sleep(2)
     data = req.json()
     u_data = data['result']
     user_data = u_data[0]
@@ -24,7 +24,7 @@ def analysis(request):
     #Fetch last 10 contests user has participated
     user_past_contests_url = 'https://codeforces.com/api/user.rating?handle=' + user_name
     req1 = requests.get(user_past_contests_url)
-    #time.sleep(1)
+    time.sleep(2)
     data1 = req1.json()
     c_data = data1['result']
     c_data.reverse()
@@ -42,7 +42,7 @@ def analysis(request):
             past_contest_performance[i][j] = 0
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_10_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
-        #time.sleep(2)
+        time.sleep(2)
         data2 = req2.json()
         contest_status_data = data2['result']
         total_problem_rating = 0
@@ -77,7 +77,7 @@ def analysis(request):
     for i in range(len(past_contests)):
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
-        time.sleep(1)
+        time.sleep(2)
         data2 = req2.json()
         contest_status_data = data2['result']
         flag = 0
