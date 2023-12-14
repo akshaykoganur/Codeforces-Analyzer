@@ -85,7 +85,7 @@ def analysis(request):
     past_contests_problems_attempted_by_rating = [0]*27
     past_contests_problems_accepted_by_rating = [0]*27
     ma = 0
-    for i in range(min(3,len(past_contests))):
+    '''for i in range(len(past_contests)):
         start_time = time.time()
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
@@ -107,7 +107,7 @@ def analysis(request):
                 ma = max(ma, (contest_status_data[j]["problem"]["rating"]-800)//100)
                 past_contests_problems_attempted_by_rating[(contest_status_data[j]["problem"]["rating"]-800)//100]+=1
         end_time = time.time()
-        arr.append(end_time-start_time)
+        arr.append(end_time-start_time)'''
     ma+=1
     ratings = ['800','900','1000','1100','1200','1300','1400','1500','1600','1700','1800','1900','2000','2100','2200','2300','2400','2500','2600','2700','2800','2900','3000','3100','3200','3300','3400','3500']
     fig1 = go.Figure()
