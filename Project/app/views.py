@@ -65,7 +65,10 @@ def analysis(request):
                 if(flag==0 and contest_status_data[j]["problem"]["rating"]):
                     total_problem_rating+=contest_status_data[j]["problem"]["rating"]
                 total_problems_solved+=1
-        past_arr[i] = total_problem_rating/total_problems_solved
+        if(total_problems_solved>0):
+            past_arr[i] = total_problem_rating/total_problems_solved
+        else:
+            past_arr[i] = 0
         past_contest_problems_solved[i] = total_problems_solved
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.add_trace(go.Scatter(y=past_arr, name='Average Rating of Problems Solved'), secondary_y=False,)
@@ -82,7 +85,7 @@ def analysis(request):
     past_contests_problems_attempted_by_rating = [0]*27
     past_contests_problems_accepted_by_rating = [0]*27
     ma = 0
-    for i in range(len(past_contests)):
+    for i in range(min(3,len(past_contests))):
         start_time = time.time()
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
