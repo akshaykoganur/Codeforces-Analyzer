@@ -42,7 +42,7 @@ def analysis(request):
     past_contest_performance = [[0]*10]*len(past_10_contests)
     past_arr = [0]*len(past_10_contests)
     past_contest_problems_solved = [0]*len(past_10_contests)
-    for i in range(len(past_10_contests)):
+    for i in range(4):
         for j in range(10):
             past_contest_performance[i][j] = 0
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_10_contests[i]) + '&from=1&count=100&handle=' + user_name
@@ -50,7 +50,7 @@ def analysis(request):
         #time.sleep(2)
         data2 = req2.json()
         if (data2['status'] == "FAILED"):
-            conntinue
+            continue
         contest_status_data = data2['result']
         total_problem_rating = 0
         total_problems_solved = 0
@@ -85,7 +85,29 @@ def analysis(request):
     past_contests_problems_attempted_by_rating = [0]*27
     past_contests_problems_accepted_by_rating = [0]*27
     ma = 0
-    
+    for i in range(4):
+        start_time = time.time()
+        contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
+        req2 = requests.get(contest_status_url)
+        #time.sleep(2)
+        data2 = req2.json()
+        if (data2['status'] == "FAILED"):
+            continue
+        contest_status_data = data2['result']
+        flag = 0
+        if "rating" in contest_status_data[0]["problem"]:
+            fla = 0
+        else:
+           flag+=1
+        for j in range(len(contest_status_data)):
+            if(contest_status_data[j]['verdict']=="OK"):
+                if(flag==0 and contest_status_data[j]["problem"]["rating"]):
+                    past_contests_problems_accepted_by_rating[(contest_status_data[j]["problem"]["rating"]-800)//100]+=1
+            if(flag==0):
+                ma = max(ma, (contest_status_data[j]["problem"]["rating"]-800)//100)
+                past_contests_problems_attempted_by_rating[(contest_status_data[j]["problem"]["rating"]-800)//100]+=1
+        end_time = time.time()
+        arr.append(end_time-start_time)
     ma+=1
     ratings = ['800','900','1000','1100','1200','1300','1400','1500','1600','1700','1800','1900','2000','2100','2200','2300','2400','2500','2600','2700','2800','2900','3000','3100','3200','3300','3400','3500']
     fig1 = go.Figure()
