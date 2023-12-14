@@ -12,20 +12,25 @@ def home(request):
     return render(request, "home.html")
 
 def analysis(request):
+    of = 0
     #Fetch basic user info
     user_name = request.GET.get("user_name")
     user_info_url = 'https://codeforces.com/api/user.info?handles=' + user_name
     req = requests.get(user_info_url)
-    time.sleep(2)
+    #time.sleep(2)
     data = req.json()
+    if(data['status']=="FAILED"):
+        return render(request, 'analysis.html', context={'user_info': "", 'past_c': [], 'past': [], })
     u_data = data['result']
     user_data = u_data[0]
 
     #Fetch last 10 contests user has participated
     user_past_contests_url = 'https://codeforces.com/api/user.rating?handle=' + user_name
     req1 = requests.get(user_past_contests_url)
-    time.sleep(2)
+    #time.sleep(2)
     data1 = req1.json()
+    if (data1['status'] == "FAILED"):
+        return render(request, 'analysis.html', context={'user_info': "", 'past_c': [], 'past': [], })
     c_data = data1['result']
     c_data.reverse()
     past_10_contests = []
@@ -42,8 +47,10 @@ def analysis(request):
             past_contest_performance[i][j] = 0
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_10_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
-        time.sleep(2)
+        #time.sleep(2)
         data2 = req2.json()
+        if (data2['status'] == "FAILED"):
+            conntinue
         contest_status_data = data2['result']
         total_problem_rating = 0
         total_problems_solved = 0
@@ -67,6 +74,7 @@ def analysis(request):
 
 
     #Past Contests Submission
+    arr = []
     past_contests = []
     for i in range(len(c_data)):
         cur_data = c_data[i]
@@ -75,10 +83,13 @@ def analysis(request):
     past_contests_problems_accepted_by_rating = [0]*27
     ma = 0
     for i in range(len(past_contests)):
+        start_time = time.time()
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
-        time.sleep(2)
+        #time.sleep(2)
         data2 = req2.json()
+        if (data['status'] == "FAILED"):
+            continue
         contest_status_data = data2['result']
         flag = 0
         if "rating" in contest_status_data[0]["problem"]:
@@ -92,6 +103,8 @@ def analysis(request):
             if(flag==0):
                 ma = max(ma, (contest_status_data[j]["problem"]["rating"]-800)//100)
                 past_contests_problems_attempted_by_rating[(contest_status_data[j]["problem"]["rating"]-800)//100]+=1
+        end_time = time.time()
+        arr.append(end_time-start_time)
     ma+=1
     ratings = ['800','900','1000','1100','1200','1300','1400','1500','1600','1700','1800','1900','2000','2100','2200','2300','2400','2500','2600','2700','2800','2900','3000','3100','3200','3300','3400','3500']
     fig1 = go.Figure()
@@ -99,5 +112,5 @@ def analysis(request):
     fig1.add_trace(go.Bar(x=ratings[:ma],y=past_contests_problems_attempted_by_rating[:ma], name='Total Submissions in Contest'))
     chart1 = fig1.to_html
 
-    return render(request, 'analysis.html', context={'user_info': user_data, 'past_c': chart1, 'past': chart})
+    return render(request, 'analysis.html', context={'user_info': user_data, 'past_c': chart1, 'past': chart,})
     #return HttpResponse(req)
