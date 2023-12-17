@@ -42,7 +42,7 @@ def analysis(request):
     past_contest_performance = [[0]*10]*len(past_10_contests)
     past_arr = [0]*len(past_10_contests)
     past_contest_problems_solved = [0]*len(past_10_contests)
-    for i in range(4):
+    for i in range(len(past_10_contests)):
         for j in range(10):
             past_contest_performance[i][j] = 0
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_10_contests[i]) + '&from=1&count=100&handle=' + user_name
@@ -85,7 +85,7 @@ def analysis(request):
     past_contests_problems_attempted_by_rating = [0]*27
     past_contests_problems_accepted_by_rating = [0]*27
     ma = 0
-    for i in range(4):
+    for i in range(len(past_contests)):
         start_time = time.time()
         contest_status_url = 'https://codeforces.com/api/contest.status?contestId='+ str(past_contests[i]) + '&from=1&count=100&handle=' + user_name
         req2 = requests.get(contest_status_url)
